@@ -7,7 +7,7 @@ from pimose_ros.msg import LightSensorValues
 
 class LightsensorTest(unittest.TestCase):
     def setUp(seif):
-        self.count =0
+        self.count = 0
         rospy.Subscriber('/lightsensors', LightsensorValues, self.callback)
         self.values = LightSensorValues()
 
@@ -16,7 +16,7 @@ class LightsensorTest(unittest.TestCase):
         self.values = data
 
     def check_values(self,lf,ls,rs,rf):
-        vs = self,values
+        vs = self.values
         self.assertEqual(vs.left_forward, lf, "different value: left_forward")
         self.assertEqual(vs.left_side, ls, "different value: left_side")
         self.assertEqual(vs.right_side, rs, "different value: right_side")
@@ -51,4 +51,4 @@ class LightsensorTest(unittest.TestCase):
 if __name__ == '__main__':
     time.sleep(3)
     rospy.init_node('travis_test_lightsensors')
-    rostest.rosrun('pimouse_ros','travis_test_lightsensorTest')
+    rostest.rosrun('pimouse_ros','travis_test_lightsensors',LightsensorTest)
