@@ -1,9 +1,9 @@
 #!/usr/bin/env python
-#encoding: utf8
+#encoding: utf8                 #長くてコメントが増えそうなので入れました
 import sys, rospy
 from pimouse_ros.msg import LightSensorValues
 
-def get_freq():
+def get_freq():    #この関数を追加
     f = rospy.get_param('lightsensors_freq',10)
     try:
         if f <= 0.0:
@@ -14,13 +14,13 @@ def get_freq():
 
     return f
 
-if __name__== '__main__':
+if __name__ == '__main__':
     devfile = '/dev/rtlightsensor0'
     rospy.init_node('lightsensors')
     pub = rospy.Publisher('lightsensors', LightSensorValues, queue_size=1)
-    
-    freq = get_freq()
-    rate = rospy.Rate(freq)
+
+    freq = get_freq()        #追加
+    rate = rospy.Rate(freq)  #rate = rospy.Rate(10)から書き換え
     while not rospy.is_shutdown():
         try:
             with open(devfile,'r') as f:
@@ -34,12 +34,16 @@ if __name__== '__main__':
                 d.sum_all = sum(data)
                 d.sum_forward = data[0] + data[3]
                 pub.publish(d)
-        except:
-            rospy.logerr("cannot write to" + devfile)
+        except IOError:
+            rospy.logerr("cannot write to " + devfile)
 
-        f = get_freq()
+        f = get_freq()                 #ここから4行追加
         if f != freq:
             freq = f
-            rate = rospy.Rate(freq)
+            rate = rospy.Rate(freq)    #ここまで
+    
+        rate.sleep()
 
-            rate.sleep()
+# Copyright 2016 Ryuichi Ueda
+# Released under the BSD License.
+# To make line numbers be identical with the book, this statement is written here. Don't move it to the header.
